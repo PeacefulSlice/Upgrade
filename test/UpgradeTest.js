@@ -1,14 +1,14 @@
 const Upgrade = artifacts.require('Upgrade');
-const { expect } = require('chai');
+// const { expect } = require('chai');
 // const {deployProxy} = require('@openzeppelin/truffle-upgrades');
 
-contract('Upgrade',() => {
-    it('should deploy smart contract properly', async() => {
-        const upgrade = await Upgrade.deployed();
-        console.log(upgrade.address);
-        assert(upgrade.address != '');
-    })
-});
+// contract('Upgrade',() => {
+//     it('should deploy smart contract properly', async() => {
+//         const upgrade = await Upgrade.deployed();
+//         console.log(upgrade.address);
+//         assert(upgrade.address != '');
+//     })
+// });
 
 // async function main() {
 //     const Upgrade = await ethers.getContractFactory("Upgrade");
@@ -20,10 +20,25 @@ contract('Upgrade',() => {
 //   }
   
 //   main();
-it('works before and after upgrading', async function () {
-  const instance = await upgrades.deployProxy(Box, [42]);
-  assert.strictEqual(await instance.retrieve(), 42);
+
+
+
+// it('works before and after upgrading', async function () {
+//   const instance = await upgrades.deployProxy(Box, [42]);
+//   assert.strictEqual(await instance.retrieve(), 42);
   
-  await upgrades.upgradeProxy(instance.address, BoxV2);
-  assert.strictEqual(await instance.retrieve(), 42);
+//   await upgrades.upgradeProxy(instance.address, BoxV2);
+//   assert.strictEqual(await instance.retrieve(), 42);
+// });
+const { deployProxy } = require('@openzeppelin/truffle-upgrades');
+
+const Box = artifacts.require('Box');
+
+
+describe('upgrades', () => {
+  it('works', async () => {
+    const box = await deployProxy(Upgrade, [42]);
+    
+    assert.equal(value.toString(), '42');
+  });
 });
