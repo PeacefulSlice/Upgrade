@@ -2,7 +2,9 @@
   "dependencies": {
     "@openzeppelin/contracts": "^4.3.2",
     "@openzeppelin/contracts-upgradeable": "^4.3.2",
-    "@truffle/hdwallet-provider": "^1.6.0"
+    "@openzeppelin/test-helpers": "^0.5.15",
+    "@truffle/hdwallet-provider": "^1.6.0",
+    "web3": "^1.6.1"
   },
   "devDependencies": {
     "@openzeppelin/truffle-upgrades": "^1.11.0",
