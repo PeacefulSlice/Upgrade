@@ -13,7 +13,7 @@ const PProxyAdmin = artifacts.require('PProxyAdmin');
 // }
 
 
-module.exports = async function(deployer,network, accounts){
+module.exports = async function(deployer, accounts){
   let admin = accounts[0];
   console.log("Deploy: Admin: "+admin);
 
@@ -31,7 +31,9 @@ module.exports = async function(deployer,network, accounts){
     // console.log("Proxy Admin: ",proxyAdmin.address);
 
     // await Upgrade.new().then(instance => masterUpgradeCopy = instance);
-
+    // let proxyAdmin;
+    // let upgrade;
+    // let proxyInstance;
 // **************************
     await PProxyAdmin.new().then(instance => proxyAdmin = instance);
     await Upgrade.new().then(instance => masterUpgradeCopy = instance);
