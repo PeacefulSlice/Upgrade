@@ -1,51 +1,88 @@
-// const {
-   
-//     constants,
-//     expectEvent,
-//     expectRevert
-// } = require('@openzeppelin/test-helpers');
-// const web3 = require("web3");
-// const BN  = web3.utils.BN;
+const { time, expectRevert } = require('@openzeppelin/test-helpers');
+// const bigDecimal = require('js-big-decimal');
+const web3 = require("web3");
+const BN = web3.utils.BN;
+const chai = require('chai');
+const {expect,assert} = require('chai');
 
-// function toBN(number){
-//     return web3.utils.toBN(number);
-// }
-
-// const Upgrade = artifacts.require('Upgrade');
+// const Upgrade= artifacts.require('Upgrade');
 // const PProxy = artifacts.require('PProxy');
 // const PProxyAdmin = artifacts.require('PProxyAdmin');
+const UpgradeV2 = artifacts.require('UpgradeV2');
+const Support = artifacts.require('Support');
 
+function toBN(number){
+    return web3.utils.toBN(number);
+}
 
-// contract('Upgrade', (accounts) => {
-//     const decimals = toBN(10).pow(toBN(18));
+contract ('UpgradeV2', (accounts) => {
     
-//     let admin = accounts[0];
-//     let upgrade;
+    const decimals = toBN(10).pow(toBN(18));
+    admin = accounts[0];
+    user1 = accounts[1];
+    user2 = accounts[2];
+
+    let upgradeV2;
+    let support;
     
-
-//     before( async () => {
-//         // await PProxyAdmin.new().then(instance => proxyAdmin = instance);
-//         // await Upgrade.new().then(instance => upgrade = instance);
-//         // await PProxy.new(upgrade.address, proxyAdmin.address, web3.utils.hexToBytes('0x')).then(instance=> proxyInstance = instance);
-
-//         // upgrade = await Upgrade.at(masterCopy.address);
+    before(async ()=> {
         
+        await Support.deployed().then(instance => support = instance);
+        let contractAddress = await support.getUpgradeContract.call();
+        upgradeV2 = await UpgradeV2.at(contractAddress);
+
+
+       
         
-//         // let ProxyAdmin = await PProxyAdmin.at("");
-//         let upgrade = await Upgrade.at("0x13DD7B89226BA2C64837D15A203e0C2a5F01E97f");
-//         await upgrade.initialize(admin)
+        //    .then(instance => support = instance);
+        // upgradeV2.initialize(admin);
+
+    })
+    
+    it('transfers', async()=> {
+        await upgradeV2.initialize(admin);
+        let someBalance = toBN(10).mul(decimals);
+        await upgradeV2.grantRole(await upgradeV2.MINTER_ROLE.call(),accounts[0])
+        await upgradeV2.grantRole(await upgradeV2.WHITELISTED_ROLE.call(),accounts[2])
+        // param.sustring is not a function
+        await upgradeV2.mint(admin,someBalance);
+        
+        // Mint is not a function
+        await upgradeV2.increaseAllowance(admin,someBalance);
+        await upgradeV2.increaseAllowance(user1,someBalance);
+        await upgradeV2.increaseAllowance(user2,someBalance);
+        
+        // await upgradeV2.transfer.sendTransaction(user1,someBalance,{from:accounts[0]})
+        await upgradeV2.transferFrom(accounts[0],user1,someBalance)
+        // Error during the transfer: vm exception while processing transaction revert
+        console.log("balance admin = ", upgradeV2.balanceOf(accounts[0,1,2]))
+
+        console.log("admin = ",admin.address)
+        console.log("admin = ",user1.address)
+        console.log("admin = ",user2.address)
 
 
-//     });
+        await upgradeV2.blacklist(user1,{from:user2});
+        // await upgradeV2.transferFrom(accounts[0],user1,someBalance)
+        // Работает!
 
-//     it ('works', async () => {
-//         let recipient = accounts[1];
-//         let someBalance = toBN(10);
-//         await upgrade.increaseAllowance(recipient, someBalance, {from: admin})
-//         await upgrade.transferFrom(admin, recipient, someBalance, {from: recipient});
 
-//     });
 
-   
 
-// });
+
+
+
+
+        // Error: Returned error: VM Exception while processing transaction: revert caller is lack of rights -- Reason given: caller is lack of rights.
+// Когда минтил с админа без роли минтера -  ошибка выскочила, 
+// когда добавлял людей в черный список от лица админа без роли,
+//  ошибка не выскочила, но выскочила, на второго пользователя
+        // let someBalance = toBN(10).mul(decimals);
+        // await upgradev2.increaseAllowance(admin,someBalance);
+        // await upgradev2.transferFrom(admin,user1,someBalance);
+    
+    //         let balance = await upgradeV2.balanceOf.call(admin);
+    //     // await upgradeV2.transfer.sendTransaction()
+    //     expect(balance).to.be.eq.BN(toBN(100000000).mul(decimals))
+    })
+})

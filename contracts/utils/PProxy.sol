@@ -1,6 +1,6 @@
 pragma solidity ^0.8.6;
 
-import "../node_modules/@openzeppelin/contracts/proxy/transparent/TransparentUpgradeableProxy.sol";
+import "../../node_modules/@openzeppelin/contracts/proxy/transparent/TransparentUpgradeableProxy.sol";
 
 contract PProxy is TransparentUpgradeableProxy {
   
