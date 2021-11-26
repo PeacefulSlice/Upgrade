@@ -9,13 +9,13 @@ contract Support{
         
     }
     
-    function setUpgradeContract(string  memory key,address _contract) public {
+    function setUpgradeContract(string  calldata key,address _contract) public {
         // upgradeContract = _contract;
        
         contracts[key] = _contract;
     }
 
-    function getUpgradeContract(string memory key) external view returns(address){
+    function getUpgradeContract(string calldata key) external view returns(address){
         // return upgradeContract;
         return contracts[key];
     }

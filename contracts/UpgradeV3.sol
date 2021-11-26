@@ -52,5 +52,5 @@ contract UpgradeV3 is Initializable, ERC20Upgradeable,AccessControlUpgradeable, 
         require(hasRole(DEFAULT_ADMIN_ROLE, msg.sender),"caller is not an admin");
         _unpause();
     }
-
+    uint[45] private __gap;
 }

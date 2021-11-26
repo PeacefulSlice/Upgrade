@@ -6,9 +6,10 @@ const chai = require('chai');
 const {expect,assert} = require('chai');
 
 // const Upgrade= artifacts.require('Upgrade');
-// const PProxy = artifacts.require('PProxy');
-// const PProxyAdmin = artifacts.require('PProxyAdmin');
+const PProxy = artifacts.require('PProxy');
+const PProxyAdmin = artifacts.require('PProxyAdmin');
 const UpgradeV2 = artifacts.require('UpgradeV2');
+const UpgradeV3 = artifacts.require('UpgradeV3')
 const Support = artifacts.require('Support');
 
 function toBN(number){
@@ -28,8 +29,17 @@ contract ('UpgradeV2', (accounts) => {
     before(async ()=> {
         
         await Support.deployed().then(instance => support = instance);
-        let contractAddress = await support.getUpgradeContract.call();
-        upgradeV2 = await UpgradeV2.at(contractAddress);
+        // console.log("TEST");
+        // console.log("proxy instance at the begining = ", support.getUpgradeContract.call('proxy'));
+        let proxyaddress = await support.getUpgradeContract.call('proxy');
+        console.log("proxy instance = "+ proxyaddress);
+        let address = await support.getUpgradeContract.call('proxyAdmin')
+        console.log("proxy instance = "+ address);
+        let proxyAdmin = await PProxyAdmin.at(address);
+        let masterUpgradeV2Copy = await support.getUpgradeContract.call('master2');
+        
+        await proxyAdmin.upgrade.sendTransaction(proxyaddress,masterUpgradeV2Copy);
+        upgradeV2 = await UpgradeV2.at(proxyaddress);
 
 
        
@@ -55,24 +65,20 @@ contract ('UpgradeV2', (accounts) => {
         // await upgradeV2.transfer.sendTransaction(user1,someBalance,{from:accounts[0]})
         await upgradeV2.transferFrom(accounts[0],user1,someBalance)
         // Error during the transfer: vm exception while processing transaction revert
-        console.log("balance admin = ", upgradeV2.balanceOf(accounts[0,1,2]))
+        // console.log("balance admin = ", upgradeV2.balanceOf(accounts[0,1,2]))
 
-        console.log("admin = ",admin.address)
-        console.log("admin = ",user1.address)
-        console.log("admin = ",user2.address)
+        // console.log("admin = ",admin.address)
+        // console.log("admin = ",user1.address)
+        // console.log("admin = ",user2.address)
+
+
 
 
         await upgradeV2.blacklist(user1,{from:user2});
+       
+
         // await upgradeV2.transferFrom(accounts[0],user1,someBalance)
         // Работает!
-
-
-
-
-
-
-
-
         // Error: Returned error: VM Exception while processing transaction: revert caller is lack of rights -- Reason given: caller is lack of rights.
 // Когда минтил с админа без роли минтера -  ошибка выскочила, 
 // когда добавлял людей в черный список от лица админа без роли,
@@ -84,5 +90,21 @@ contract ('UpgradeV2', (accounts) => {
     //         let balance = await upgradeV2.balanceOf.call(admin);
     //     // await upgradeV2.transfer.sendTransaction()
     //     expect(balance).to.be.eq.BN(toBN(100000000).mul(decimals))
+    })
+
+
+
+    it('upgrades second time', async()=> {
+        let masterUpgradeV3Copy = await support.getUpgradeContract.call('master3');
+        let proxyaddress = await support.getUpgradeContract.call('proxy');
+        console.log("proxy instance = "+ proxyaddress);
+        let address = await support.getUpgradeContract.call('proxyAdmin')
+        console.log("proxy instance = "+ address);
+        let proxyAdmin = await PProxyAdmin.at(address);
+        await proxyAdmin.upgrade.sendTransaction(proxyaddress,masterUpgradeV3Copy);
+        upgradeV3 = await UpgradeV3.at(proxyaddress);
+      
+        await upgradeV3.pause({from:accounts[0]});
+        
     })
 })

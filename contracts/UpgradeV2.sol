@@ -53,7 +53,7 @@ contract UpgradeV2 is Initializable, ERC20Upgradeable,AccessControlUpgradeable{
      
 
     
-
+    uint[45] private __gap;
 
 
 }

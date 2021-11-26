@@ -2,6 +2,7 @@ const Upgrade = artifacts.require('Upgrade');
 const PProxy = artifacts.require('PProxy');
 const PProxyAdmin = artifacts.require('PProxyAdmin');
 const UpgradeV2 = artifacts.require('UpgradeV2');
+const UpgradeV3 = artifacts.require('UpgradeV3');
 const Support = artifacts.require('Support');
 // const web3 = require("web3");
 // const BN = web3.utils.BN;
@@ -40,6 +41,10 @@ module.exports = async function(deployer, accounts){
     console.log("Proxy instance = ", proxyInstance.address);
     console.log("Proxy Admin = ", proxyAdmin.address);
     console.log("Mastercopy address = ", masterUpgradeCopy.address)
+
+    await support.setUpgradeContract.sendTransaction('proxy',proxyInstance.address);
+    await support.setUpgradeContract.sendTransaction('proxyAdmin',proxyAdmin.address);
+    await support.setUpgradeContract.sendTransaction('master1',masterUpgradeCopy.address);
 // **************************
                     //  let upgradeTokenAddress = '0x81228003BfDF158a7E9fCd43a6A55f2087859DBD';
     // 0xd9145CCE52D386f254917e481eB44e9943F39138 первый тест на ремиксе
@@ -63,8 +68,13 @@ module.exports = async function(deployer, accounts){
 
     upgrade = await UpgradeV2.at(proxyInstance.address);
 
-    await support.setUpgradeContract.sendTransaction(proxyInstance.address);
-
+    await support.setUpgradeContract.sendTransaction('master2',masterUpgradeV2Copy.address);
+// *****************
+    let masterUpgradeV3Copy;
+    await UpgradeV3.new().then(instance => masterUpgradeV3Copy = instance);
+    await proxyAdmin.upgrade.sendTransaction(proxyInstance.address,masterUpgradeV3Copy.address);
+    upgrade = await UpgradeV3.at(proxyInstance.address);
+    await support.setUpgradeContract.sendTransaction('master3',masterUpgradeV3Copy.address);
     
 
     // let upgradev2;
