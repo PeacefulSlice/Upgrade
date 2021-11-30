@@ -1,19 +1,36 @@
+//SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "../node_modules/@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
-import "../node_modules/@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
-import "../node_modules/@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import "../node_modules/@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
+import "../../node_modules/@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
+import "../../node_modules/@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
 
-contract UpgradeV3 is Initializable, ERC20Upgradeable,AccessControlUpgradeable, PausableUpgradeable{
+import "../../node_modules/@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
+import "./Breaking.sol";
+
+contract UpgradeV3 is  Initializable, ERC20Upgradeable,AccessControlUpgradeable, PausableUpgradeable, Breaking{    
     mapping(address => bool) isBlacklisted;
+  address public user2;
+    // address public adminhead;
+    // address public user1;   
+    address public user1;
+    address public adminhead;
+    
+    
+    // string  public value;
+    
+    // address public user2;
+    
+    
+    
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
     bytes32 public constant WHITELISTED_ROLE = keccak256("WHITELISTED_ROLE");
 
     function initialize(address admin) public virtual initializer {
         __ERC20_init("Upgradev2", "UPG2");
         _mint(admin,10000000 * 10 ** decimals());
-        _setupRole(DEFAULT_ADMIN_ROLE, admin);
+        setAdmin(admin);
+        _setupRole(DEFAULT_ADMIN_ROLE, getAdmin());
+        
         __Pausable_init();
     }
 
@@ -36,6 +53,7 @@ contract UpgradeV3 is Initializable, ERC20Upgradeable,AccessControlUpgradeable, 
         require(isBlacklisted[account],"account already whitelisted");
         require(hasRole(WHITELISTED_ROLE,msg.sender),"caller is lack of rights");
         isBlacklisted[account] = false;
+        
     }
 
     function transfer(address recipient, uint256 amount) public virtual whenNotPaused override returns (bool) {
@@ -52,5 +70,34 @@ contract UpgradeV3 is Initializable, ERC20Upgradeable,AccessControlUpgradeable, 
         require(hasRole(DEFAULT_ADMIN_ROLE, msg.sender),"caller is not an admin");
         _unpause();
     }
-    uint[45] private __gap;
+    function setAdmin(address user) public{
+       _setupRole(DEFAULT_ADMIN_ROLE, user);
+       adminhead = user;
+    }
+   
+    function getAdmin() public view returns (address){
+        return adminhead;
+    }
+    // function setValue(string memory _value) public{
+    //    value = _value;
+    // }
+   
+    // function getValue() public view returns (string memory){
+    //     return value;
+    // }
+    function setUser1(address  user) public{
+       user1 = user;
+    }
+   
+    function getUser1() public view returns (address){
+        return user1;
+    }
+    function setUser2(address  user) public{
+       user2 = user;
+    }
+   
+    function getUser2() public view returns (address){
+        return user2;
+    }
+    uint256[50] private __gap;
 }

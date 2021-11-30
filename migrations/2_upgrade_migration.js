@@ -3,6 +3,7 @@ const PProxy = artifacts.require('PProxy');
 const PProxyAdmin = artifacts.require('PProxyAdmin');
 const UpgradeV2 = artifacts.require('UpgradeV2');
 const UpgradeV3 = artifacts.require('UpgradeV3');
+// const UpgradeV4 = artifacts.require('UpgradeV4');
 const Support = artifacts.require('Support');
 // const web3 = require("web3");
 // const BN = web3.utils.BN;
@@ -61,21 +62,43 @@ module.exports = async function(deployer, accounts){
     let masterUpgradeV2Copy;
     await UpgradeV2.new().then(instance => masterUpgradeV2Copy = instance);
     console.log("Upgrade master copy" , masterUpgradeV2Copy.address);
-
-    
-
     await proxyAdmin.upgrade.sendTransaction(proxyInstance.address,masterUpgradeV2Copy.address);
-
     upgrade = await UpgradeV2.at(proxyInstance.address);
-
     await support.setUpgradeContract.sendTransaction('master2',masterUpgradeV2Copy.address);
 // *****************
+
+// UPGRADE########333333333333333333
     let masterUpgradeV3Copy;
     await UpgradeV3.new().then(instance => masterUpgradeV3Copy = instance);
     await proxyAdmin.upgrade.sendTransaction(proxyInstance.address,masterUpgradeV3Copy.address);
     upgrade = await UpgradeV3.at(proxyInstance.address);
     await support.setUpgradeContract.sendTransaction('master3',masterUpgradeV3Copy.address);
     
+
+
+
+
+// Upgrade 444444 4e,lgmwr;ehrgrejigwker
+    // let masterUpgradeV4Copy;
+    // await UpgradeV4.new().then(instance => masterUpgradeV4Copy = instance);
+    // await proxyAdmin.upgrade.sendTransaction(proxyInstance.address,masterUpgradeV4Copy.address);
+    // upgrade = await UpgradeV4.at(proxyInstance.address);
+    // await support.setUpgradeContract.sendTransaction('master4',masterUpgradeV4Copy.address);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     // let upgradev2;
     // await PProxy.new(masterUpgradeCopy.address,proxyAdmin.address,web3.utils.hexToBytes('0x')).

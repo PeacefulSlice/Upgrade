@@ -1,7 +1,7 @@
 {
-  "name": "purefi-token",
+  "name": "Upgrade",
   "version": "1.0.0",
-  "description": "PureFi ERC20 token",
+  "description": "Upgrade",
   "main": "truffle-config.js",
   "directories": {
     "test": "test"
@@ -28,7 +28,7 @@
   "dependencies": {
     "@openzeppelin/contracts": "^4.3.3",
     "@openzeppelin/contracts-upgradeable": "^4.3.3",
-    "@openzeppelin/test-helpers": "^0.5.12",
+    "@openzeppelin/test-helpers": "^0.5.12", 
     "@remix-project/remixd": "^0.3.5",
     "bn-chai": "^1.0.1",
     "chai": "^4.2.0",
