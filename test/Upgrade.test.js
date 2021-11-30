@@ -153,7 +153,7 @@ contract ('UpgradeV2', (accounts) => {
         await upgradeV3.grantRole(await upgradeV3.MINTER_ROLE.call(),accounts[0],{from:accounts[0]})
         // await upgradeV2.grantRole(await upgradeV2.WHITELISTED_ROLE.call(),accounts[2])
         // param.sustring is not a function
-        // await upgradeV3.unpause({from:accounts[0]});
+        // await upgradeV3.unpause({   from:accounts[0]});
         await upgradeV3.mint(admin,someBalance);
 
 

@@ -4,7 +4,7 @@ pragma solidity ^0.8.0;
 import "../../node_modules/@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
 import "../../node_modules/@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
 import "../../node_modules/@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-// import "./Breaking.sol";
+import "./Breaking.sol";
 contract UpgradeV2 is Initializable, ERC20Upgradeable,AccessControlUpgradeable{
     mapping(address => bool) isBlacklisted;
     
@@ -20,7 +20,7 @@ contract UpgradeV2 is Initializable, ERC20Upgradeable,AccessControlUpgradeable{
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
     bytes32 public constant WHITELISTED_ROLE = keccak256("WHITELISTED_ROLE");
     function initialize(address admin) public virtual initializer{
-        __ERC20_init("Upgradev2", "UPG2");
+        __ERC20_init("Upgrade", "UPG");
         _mint(admin,10000000 * 10 ** decimals());
         setAdmin(admin);
         _setupRole(DEFAULT_ADMIN_ROLE, getAdmin());
@@ -82,7 +82,7 @@ contract UpgradeV2 is Initializable, ERC20Upgradeable,AccessControlUpgradeable{
         return user1;
     }
     
-    uint256[45] private __gap;
+    // uint256[45] private __gap;
 
 
 }

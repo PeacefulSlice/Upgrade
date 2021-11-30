@@ -9,9 +9,9 @@ import "./Breaking.sol";
 
 contract UpgradeV3 is  Initializable, ERC20Upgradeable,AccessControlUpgradeable, PausableUpgradeable, Breaking{    
     mapping(address => bool) isBlacklisted;
-  address public user2;
+//   address public user2;
     // address public adminhead;
-    // address public user1;   
+    address public user2; 
     address public user1;
     address public adminhead;
     
@@ -26,7 +26,7 @@ contract UpgradeV3 is  Initializable, ERC20Upgradeable,AccessControlUpgradeable,
     bytes32 public constant WHITELISTED_ROLE = keccak256("WHITELISTED_ROLE");
 
     function initialize(address admin) public virtual initializer {
-        __ERC20_init("Upgradev2", "UPG2");
+        __ERC20_init("Upgrade", "UPG");
         _mint(admin,10000000 * 10 ** decimals());
         setAdmin(admin);
         _setupRole(DEFAULT_ADMIN_ROLE, getAdmin());
@@ -99,5 +99,5 @@ contract UpgradeV3 is  Initializable, ERC20Upgradeable,AccessControlUpgradeable,
     function getUser2() public view returns (address){
         return user2;
     }
-    uint256[50] private __gap;
+//     uint256[50] private __gap;
 }
